@@ -23,7 +23,7 @@ def create_add_form():
             expense_description = st.text_area("Enter description of expense", placeholder="Vanilla flavor from Rita's")
             submitted = st.form_submit_button("Submit")
         with col2:
-            expense_amount = st.number_input("Enter your expense amount", value=0.00, step=0.25)
+            expense_amount = st.number_input("Enter your expense amount", value=0.00, step=0.25, min_value=0.00)
             expense_date = st.date_input("Enter the date of the expense", value=date.today(), format="MM/DD/YYYY")
 
         if submitted:
@@ -49,6 +49,7 @@ def create_add_form():
             """, unsafe_allow_html=True)
 
     create_delete_form(local_storage, st.session_state.expenses)
+    save_expenses(local_storage, st.session_state.expenses)
 
     # Stores delete status after reruns
     if "delete_status" in st.session_state and "delete_message" in st.session_state:
@@ -64,24 +65,22 @@ def create_add_form():
 def create_delete_form(local_storage, expenses):
     delete_form = st.form("delete_form")
     with delete_form:
-        delete_id = st.text_input("Enter expense ID to delete (0 to remove all)", value=1)
+        delete_id = st.number_input("Enter expense ID to delete (0 to remove all)", value=1,  min_value=0)
         delete_button = st.form_submit_button("Delete")
         if delete_button:
-            delete_id_int = int(delete_id)
-
-            if delete_id_int == 0 and len(expenses) > 0:
+            if delete_id == 0 and len(expenses) > 0:
                 # Clear all expenses
                 expenses.clear()
-                save_expenses(local_storage, expenses)
+                #save_expenses(local_storage, expenses)
                 st.session_state.delete_status = "success"
                 st.session_state.delete_message = "All expenses deleted successfully"
                 st.rerun()
             else:
                 original_len = len(expenses)
-                expenses[:] = [e for e in expenses if e.id != delete_id_int]
+                expenses[:] = [e for e in expenses if e.id != delete_id]
 
                 if len(expenses) < original_len:
-                    save_expenses(local_storage, expenses)
+                    #save_expenses(local_storage, expenses)
                     st.session_state.delete_status = "success"
                     st.session_state.delete_message = "Expense deleted successfully"
                     st.rerun()
