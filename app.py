@@ -23,14 +23,17 @@ def create_add_form():
             expense_description = st.text_area("Enter description of expense", placeholder="Vanilla flavor from Rita's")
             submitted = st.form_submit_button("Submit")
         with col2:
-            expense_amount = st.number_input("Enter your expense amount", value=0.00, step=0.25, min_value=0.00)
+            expense_amount = st.number_input("Enter your expense amount", value=0.01, step=0.25, min_value=0.01)
             expense_date = st.date_input("Enter the date of the expense", value=date.today(), format="MM/DD/YYYY")
 
         if submitted:
-            expense = Expense(expense_name, expense_description, expense_date, expense_amount)
-            st.session_state.expenses.append(expense)
-            expenses = st.session_state.expenses
-            save_expenses(local_storage, expenses)
+            if expense_name.strip():
+                expense = Expense(expense_name, expense_description, expense_date, expense_amount)
+                st.session_state.expenses.append(expense)
+                expenses = st.session_state.expenses
+                save_expenses(local_storage, expenses)
+            else:
+                st.warning("Enter a name for the expense")
 
     # Show all submitted expenses
     st.markdown(
