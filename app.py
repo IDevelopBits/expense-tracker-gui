@@ -54,15 +54,6 @@ def create_add_form():
     create_delete_form(local_storage, st.session_state.expenses)
     save_expenses(local_storage, st.session_state.expenses)
 
-    # Stores delete status after reruns
-    if "delete_status" in st.session_state and "delete_message" in st.session_state:
-        if st.session_state.delete_status == "success":
-            st.success(st.session_state.delete_message)
-        elif st.session_state.delete_status == "error":
-            st.error(st.session_state.delete_message)
-        # Clear after showing
-        del st.session_state.delete_status
-        del st.session_state.delete_message
 
 
 def create_delete_form(local_storage, expenses):
@@ -70,6 +61,15 @@ def create_delete_form(local_storage, expenses):
     with delete_form:
         delete_id = st.number_input("Enter expense ID to delete (0 to remove all)", value=1,  min_value=0)
         delete_button = st.form_submit_button("Delete")
+        # Stores delete status after reruns
+        if "delete_status" in st.session_state and "delete_message" in st.session_state:
+            if st.session_state.delete_status == "success":
+                st.success(st.session_state.delete_message)
+            elif st.session_state.delete_status == "error":
+                st.error(st.session_state.delete_message)
+            # Clear after showing
+            del st.session_state.delete_status
+            del st.session_state.delete_message
         if delete_button:
             if delete_id == 0 and len(expenses) > 0:
                 # Clear all expenses
