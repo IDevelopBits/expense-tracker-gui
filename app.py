@@ -96,7 +96,10 @@ def sum_expenses(expenses):
 
 
 def save_expenses(local_storage, expenses):
-    local_storage.setItem("expenses", json.dumps([e.to_dict() for e in expenses], indent=2))
+    try:
+        local_storage.setItem("expenses", json.dumps([e.to_dict() for e in expenses], indent=2))
+    except Exception as e:
+        print(e)
 
 
 def load_expenses(local_storage):
