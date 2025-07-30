@@ -70,6 +70,7 @@ def create_delete_form(local_storage, expenses):
             # Clear after showing
             del st.session_state.delete_status
             del st.session_state.delete_message
+
         if delete_button:
             if delete_id == 0 and len(expenses) > 0:
                 # Clear all expenses
